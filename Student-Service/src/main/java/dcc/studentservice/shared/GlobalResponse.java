@@ -1,4 +1,4 @@
-package com.example.Mylab.shared;
+package dcc.studentservice.shared;
 
 
 import lombok.Getter;
