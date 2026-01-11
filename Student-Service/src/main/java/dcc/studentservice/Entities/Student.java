@@ -13,10 +13,11 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID id ;
 
     @Column(nullable = false, updatable = false)
     private UUID keycloakUserId;
@@ -37,6 +38,7 @@ public class Student {
 
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean enabled = false;
 
 
@@ -47,6 +49,9 @@ public class Student {
 
     @PrePersist
     protected void onCreate() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
         this.createdAt = LocalDate.now();
         if (enabled == null) {
             this.enabled = false;

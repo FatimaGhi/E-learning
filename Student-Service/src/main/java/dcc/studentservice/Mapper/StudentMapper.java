@@ -6,10 +6,13 @@ import dcc.studentservice.DTO.StudentResponseDTO;
 import dcc.studentservice.Entities.Student;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class StudentMapper {
     public Student toEntity(StudentRequestDTO dto) {
         return Student.builder()
+                .id(UUID.randomUUID())
                 .keycloakUserId(dto.getKeycloakUserId())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())

@@ -7,11 +7,14 @@ import dcc.studentservice.Mapper.StudentMapper;
 import dcc.studentservice.Repo.StudentRepository;
 import dcc.studentservice.interfaces.StudentService;
 import dcc.studentservice.shared.CustomResponseException;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class StudentServiceImpl  implements StudentService {
 
     private StudentRepository studentRepository;
@@ -25,6 +28,7 @@ public class StudentServiceImpl  implements StudentService {
 
 
     @Override
+    @Transactional
     public StudentResponseDTO createStudent(StudentRequestDTO requestDTO) {
         // Check if email already exists
         studentRepository.findByEmail(requestDTO.getEmail())
