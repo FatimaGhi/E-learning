@@ -17,7 +17,7 @@ public interface StudentService {
 
     List<StudentResponseDTO> getAllStudents();
 
-    StudentResponseDTO enableStudent(UUID id);
+//    StudentResponseDTO enableStudent(UUID id);
 
     void deleteStudent(UUID id);
 

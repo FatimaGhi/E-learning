@@ -19,7 +19,6 @@ public class StudentMapper {
                 .email(dto.getEmail())
                 .birthDate(dto.getBirthDate())
                 .phone(dto.getPhone())
-                .enabled(false) // default for verfiy email
                 .build();
     }
 
@@ -32,7 +31,6 @@ public class StudentMapper {
                 .email(student.getEmail())
                 .birthDate(student.getBirthDate())
                 .phone(student.getPhone())
-                .enabled(student.getEnabled())
                 .createdAt(student.getCreatedAt())
                 .updatedAt(student.getUpdatedAt())
                 .build();

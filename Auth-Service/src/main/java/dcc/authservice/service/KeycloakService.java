@@ -1,20 +1,24 @@
 package dcc.authservice.service;
 
 import dcc.authservice.Config.KeycloakConfig;
+import dcc.authservice.DTO.LoginResponse;
 import dcc.authservice.DTO.StudentSignUpRequest;
+import dcc.authservice.DTO.UserInfo;
 import dcc.authservice.shared.CustomResponseException;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.AccessTokenResponse;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -134,6 +138,68 @@ public class KeycloakService {
         } catch (Exception e) {
             log.error("Error deleting user from Keycloak", e);
             throw CustomResponseException.InternalError("Error deleting user from Keycloak: " + e.getMessage());
+        }
+    }
+
+
+    public LoginResponse login(String email, String password) {
+        try {
+
+            Keycloak userKeycloak = KeycloakBuilder.builder()
+                    .serverUrl(keycloakConfig.getAuthServerUrl())
+                    .realm(keycloakConfig.getRealm())
+                    .clientId(keycloakConfig.getClientId())
+                    .clientSecret(keycloakConfig.getClientSecret())
+                    .username(email)
+                    .password(password)
+                    .build();
+
+            AccessTokenResponse tokenResponse = userKeycloak.tokenManager().getAccessToken();
+
+
+            RealmResource realmResource = keycloak.realm(keycloakConfig.getRealm());
+            UsersResource usersResource = realmResource.users();
+
+            List<org.keycloak.representations.idm.UserRepresentation> users =
+                    usersResource.searchByEmail(email, true);
+
+            if (users.isEmpty()) {
+                throw CustomResponseException.Unauthorized("Invalid credentials");
+            }
+
+            org.keycloak.representations.idm.UserRepresentation user = users.get(0);
+
+
+            if (!user.isEnabled()) {
+                throw CustomResponseException.Forbidden("Account is disabled. Please verify your email.");
+            }
+
+            UserResource userResource = usersResource.get(user.getId());
+            List<RoleRepresentation> roles = userResource.roles().realmLevel().listAll();
+            List<String> roleNames = roles.stream()
+                    .map(RoleRepresentation::getName)
+                    .collect(Collectors.toList());
+
+
+            UserInfo userInfo = UserInfo.builder()
+                    .id(UUID.fromString(user.getId()))
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .roles(roleNames)
+                    .build();
+
+            return LoginResponse.builder()
+                    .accessToken(tokenResponse.getToken())
+                    .refreshToken(tokenResponse.getRefreshToken())
+                    .tokenType("Bearer")
+                    .expiresIn(tokenResponse.getExpiresIn())
+                    .user(userInfo)
+                    .build();
+
+        } catch (Exception e) {
+            log.error("Login failed for user: {}", email, e);
+            throw CustomResponseException.Unauthorized("Invalid email or password");
         }
     }
 

@@ -58,11 +58,11 @@ public class StudentController {
     }
 
     // Enable student
-    @PutMapping("/enable/{id}")
-    public ResponseEntity<GlobalResponse<StudentResponseDTO>> enableStudent(@PathVariable UUID id) {
-        StudentResponseDTO student = studentService.enableStudent(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new GlobalResponse<>(student));
-    }
+//    @PutMapping("/enable/{id}")
+//    public ResponseEntity<GlobalResponse<StudentResponseDTO>> enableStudent(@PathVariable UUID id) {
+//        StudentResponseDTO student = studentService.enableStudent(id);
+//        return ResponseEntity.status(HttpStatus.OK).body(new GlobalResponse<>(student));
+//    }
 
     // Delete student
     @DeleteMapping("/{id}")

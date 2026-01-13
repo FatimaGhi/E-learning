@@ -11,17 +11,38 @@ import org.springframework.beans.factory.annotation.Value;
 @Getter
 @Configuration
 public class KeycloakConfig {
+//    @Value("${keycloak.auth-server-url}")
+//    private String authServerUrl;
+//
+//    @Value("${keycloak.realm}")
+//    private String realm;
+//
+//    @Value("${keycloak.admin-username}")
+//    private String adminUsername;
+//
+//    @Value("${keycloak.admin-password}")
+//    private String adminPassword;
+
     @Value("${keycloak.auth-server-url}")
     private String authServerUrl;
 
     @Value("${keycloak.realm}")
     private String realm;
 
+    @Value("${keycloak.client-id}")
+    private String clientId;
+
+    @Value("${keycloak.client-secret}")
+    private String clientSecret;
+
     @Value("${keycloak.admin-username}")
     private String adminUsername;
 
     @Value("${keycloak.admin-password}")
     private String adminPassword;
+
+    @Value("${keycloak.admin-client-id:admin-cli}")
+    private String adminClientId;
 
     @Bean
     public Keycloak keycloak() {

@@ -54,13 +54,13 @@ public class StudentServiceImpl  implements StudentService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public StudentResponseDTO enableStudent(UUID id) {
-        Student student = studentRepository.findById(id)
-                .orElseThrow(() -> CustomResponseException.ResourceNotFound("Student not found"));
-        student.setEnabled(true);
-        return studentMapper.toResponseDTO(studentRepository.save(student));
-    }
+//    @Override
+//    public StudentResponseDTO enableStudent(UUID id) {
+//        Student student = studentRepository.findById(id)
+//                .orElseThrow(() -> CustomResponseException.ResourceNotFound("Student not found"));
+//        student.setEnabled(true);
+//        return studentMapper.toResponseDTO(studentRepository.save(student));
+//    }
 
     @Override
     public void deleteStudent(UUID id) {

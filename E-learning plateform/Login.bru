@@ -1,0 +1,15 @@
+meta {
+  name: Login
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:9090/auth-service/api/auth/login
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

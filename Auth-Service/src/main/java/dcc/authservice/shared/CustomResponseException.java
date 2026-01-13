@@ -37,6 +37,10 @@ public class CustomResponseException  extends RuntimeException{
     public static CustomResponseException UnauthorizedToken(String message) {
         return new CustomResponseException(401, message);
     }
+    public static CustomResponseException Unauthorized(String message) {
+        return new CustomResponseException(401, message);
+    }
+
     public static CustomResponseException Created(String message) {
         return new CustomResponseException(201, message);
     }

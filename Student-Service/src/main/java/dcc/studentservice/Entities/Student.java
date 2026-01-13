@@ -37,10 +37,6 @@ public class Student {
     private String phone;
 
 
-    @Column(nullable = false)
-    @Builder.Default
-    private Boolean enabled = false;
-
 
     @Column(updatable = false)
     private LocalDate createdAt;
@@ -53,9 +49,7 @@ public class Student {
             id = UUID.randomUUID();
         }
         this.createdAt = LocalDate.now();
-        if (enabled == null) {
-            this.enabled = false;
-        }
+
     }
 
     @PreUpdate

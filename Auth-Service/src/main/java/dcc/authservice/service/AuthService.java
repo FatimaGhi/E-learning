@@ -1,10 +1,7 @@
 package dcc.authservice.service;
 
 import dcc.authservice.Client.StudentClient;
-import dcc.authservice.DTO.StudentRequestDTO;
-import dcc.authservice.DTO.StudentResponseDTO;
-import dcc.authservice.DTO.StudentSignUpRequest;
-import dcc.authservice.DTO.StudentSignUpResponse;
+import dcc.authservice.DTO.*;
 import dcc.authservice.shared.CustomResponseException;
 import dcc.authservice.shared.GlobalResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -86,4 +83,28 @@ public class AuthService {
             throw CustomResponseException.InternalError("Sign up failed: " + e.getMessage());
         }
     }
+
+    public LoginResponse login(LoginRequest request) {
+        try {
+            log.info("Login attempt for user: {}", request.getEmail());
+
+            LoginResponse response = keycloakService.login(
+                    request.getEmail(),
+                    request.getPassword()
+            );
+
+            log.info("Login successful for user: {}", request.getEmail());
+            return response;
+
+        } catch (CustomResponseException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error during login", e);
+            throw CustomResponseException.InternalError("Login failed: " + e.getMessage());
+        }
+    }
+
+
+
+
 }

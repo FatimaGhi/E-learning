@@ -25,7 +25,6 @@ public class StudentResponseDTO {
 
     private String phone;
 
-    private Boolean enabled;
 
     private LocalDate createdAt;
 
