@@ -19,7 +19,8 @@ public class SecurityConfig {
                                 "/actuator/health",
                                 "/actuator/info",
                                 "/api/auth/signup/**",
-                                "/api/auth/login"
+                                "/api/auth/login",
+                                "/api/auth/formattor/register"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

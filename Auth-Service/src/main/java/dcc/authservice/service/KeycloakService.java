@@ -1,6 +1,7 @@
 package dcc.authservice.service;
 
 import dcc.authservice.Config.KeycloakConfig;
+import dcc.authservice.DTO.FormateurSignUpRequest;
 import dcc.authservice.DTO.LoginResponse;
 import dcc.authservice.DTO.StudentSignUpRequest;
 import dcc.authservice.DTO.UserInfo;
@@ -200,6 +201,52 @@ public class KeycloakService {
         } catch (Exception e) {
             log.error("Login failed for user: {}", email, e);
             throw CustomResponseException.Unauthorized("Invalid email or password");
+        }
+    }
+//add formattor
+    public String createFormateur(FormateurSignUpRequest request) {
+        try {
+            RealmResource realmResource = keycloak.realm(keycloakConfig.getRealm());
+            UsersResource usersResource = realmResource.users();
+
+            // Create user representation
+            org.keycloak.representations.idm.UserRepresentation user =
+                    new org.keycloak.representations.idm.UserRepresentation();
+
+            user.setUsername(request.getUsername());
+            user.setEmail(request.getEmail());
+            user.setFirstName(request.getFirstName());
+            user.setLastName(request.getLastName());
+            user.setEnabled(true);
+            user.setEmailVerified(true); // Formateurs are pre-verified by admin
+
+            Response response = usersResource.create(user);
+
+            if (response.getStatus() == 409) {
+                throw CustomResponseException.Conflict("Email or username already exists in Keycloak");
+            }
+
+            if (response.getStatus() != 201) {
+                String errorMsg = response.readEntity(String.class);
+                log.error("Failed to create formateur in Keycloak: {}", errorMsg);
+                throw CustomResponseException.InternalError("Failed to create formateur in Keycloak");
+            }
+
+            String locationHeader = response.getHeaderString("Location");
+            String userId = locationHeader.substring(locationHeader.lastIndexOf('/') + 1);
+
+            // Set password
+            setPassword(userId, request.getPassword());
+
+            // Assign ROLE_FORMATEUR
+            assignRole(userId, "ROLE_FORMATTER");
+
+            log.info("Formateur created successfully in Keycloak with ID: {}", userId);
+            return userId;
+
+        } catch (Exception e) {
+            log.error("Error creating formateur in Keycloak", e);
+            throw CustomResponseException.InternalError("Error creating formateur: " + e.getMessage());
         }
     }
 

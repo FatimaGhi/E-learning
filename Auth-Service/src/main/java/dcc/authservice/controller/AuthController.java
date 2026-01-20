@@ -1,9 +1,6 @@
 package dcc.authservice.controller;
 
-import dcc.authservice.DTO.LoginRequest;
-import dcc.authservice.DTO.LoginResponse;
-import dcc.authservice.DTO.StudentSignUpRequest;
-import dcc.authservice.DTO.StudentSignUpResponse;
+import dcc.authservice.DTO.*;
 import dcc.authservice.service.AuthService;
 import dcc.authservice.shared.GlobalResponse;
 import jakarta.validation.Valid;
@@ -39,5 +36,20 @@ public class AuthController {
         log.info("Login request received for: {}", request.getEmail());
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(new GlobalResponse<>(response));
+    }
+
+
+    @PostMapping("/formattor/register")
+    public ResponseEntity<GlobalResponse<FormateurSignUpResponse>> registerFormateur(
+            @Valid @RequestBody FormateurSignUpRequest request,
+            @RequestHeader("Authorization") String authHeader) {
+
+        log.info(" Received formateur registration request for: {}", request.getEmail());
+        log.info(" Authorization header present: {}", authHeader != null);
+
+        FormateurSignUpResponse response = authService.signUpFormateur(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new GlobalResponse<>(response));
     }
 }

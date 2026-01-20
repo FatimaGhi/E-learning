@@ -104,6 +104,49 @@ public class AuthService {
         }
     }
 
+    // signUpFormateur
+
+    @Transactional
+    public FormateurSignUpResponse signUpFormateur(FormateurSignUpRequest request) {
+        String keycloakUserId = null;
+
+        try {
+            // 1. Check if email exists
+            if (keycloakService.emailExists(request.getEmail())) {
+                throw CustomResponseException.Conflict("Email already exists");
+            }
+
+            // 2. Create user in Keycloak with ROLE_FORMATEUR
+            keycloakUserId = keycloakService.createFormateur(request);
+            log.info("Formateur created in Keycloak: {}", keycloakUserId);
+
+            // 3. Return response
+            return FormateurSignUpResponse.builder()
+                    .userId(keycloakUserId)
+                    .email(request.getEmail())
+                    .username(request.getUsername())
+                    .firstName(request.getFirstName())
+                    .lastName(request.getLastName())
+                    .message("Formateur account created successfully")
+                    .build();
+
+        } catch (CustomResponseException e) {
+            // Rollback: delete from Keycloak if error
+            if (keycloakUserId != null) {
+                log.error("Rollback: Deleting formateur from Keycloak");
+                keycloakService.deleteUser(keycloakUserId);
+            }
+            throw e;
+        } catch (Exception e) {
+            if (keycloakUserId != null) {
+                log.error("Rollback: Deleting formateur from Keycloak");
+                keycloakService.deleteUser(keycloakUserId);
+            }
+            log.error("Unexpected error during formateur sign up", e);
+            throw CustomResponseException.InternalError("Sign up failed: " + e.getMessage());
+        }
+    }
+
 
 
 
