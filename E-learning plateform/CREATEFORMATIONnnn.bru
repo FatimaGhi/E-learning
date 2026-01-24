@@ -1,0 +1,35 @@
+meta {
+  name: CREATEFORMATIONnnn
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:9090/formation-service/api/formations
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHUHFZWWNXNE5lUk5uS3FUdmx1ZHVIZDYwT20ySnBYalZFUl9ZWng3SjRNIn0.eyJleHAiOjE3NjkyMDI1ODEsImlhdCI6MTc2OTIwMjI4MSwianRpIjoiNzMxZDBiMGMtNmI4MS00ODVlLWJiZTktMDllNGU3YjUyMWExIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9lLWxlYXJuaW5nLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImEzMzBiMmUwLTZkYjAtNGI2OS05ZGFiLWNiNjZlYmY2MzBkZiIsInR5cCI6IkJlYXJlciIsImF6cCI6IkF1dGgtU2VydmljZSIsInNlc3Npb25fc3RhdGUiOiJmNTg5OGEwYy0xMjcyLTQ5ZTktOTIyYS1iYTI3NjMzYmU1YmYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZS1sZWFybmluZy1yZWFsbSIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJST0xFX0ZPUk1BVFRFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsInNpZCI6ImY1ODk4YTBjLTEyNzItNDllOS05MjJhLWJhMjc2MzNiZTViZiIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiQWhtZWRoaWggQmVuYW5pIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWhtZWRmb3JtYXR0b3IxIiwiZ2l2ZW5fbmFtZSI6IkFobWVkaGloIiwiZmFtaWx5X25hbWUiOiJCZW5hbmkiLCJlbWFpbCI6ImFobWVkZmF0aW1hQGV4YW1wbGUuY29tIn0.WJlGWzHtpqpm7Fs1BZDYBgA9fJJkhT9zAP0oloalqBTKbXVdX6T4mcydXXNn-awQzYt-XA6-iLlU7BiiOwPWwO6EmSxNzY3YJ2ptOY25jqcBb7Sq-GRJp0tUVSX8RIm_8fZR5danSQCfT6uh6ouB9Ox9Tk5P7TbpiOUL92jZ3Yckg3CTzoyWCsXc1UJUCyHld521Bh13DQXri7CyDGv947nMBj1ghJBmCjm0iY9kk6XXnmdAmkDJvDFap_SGsl1DcuW_-G4xErBkqP5rvgZLik6Jzvq-8324EaXDESWo5oZ1eU8szEIGCu1rFAqf7p_yw6xN2Dv0FKkIA0ionU-tfg
+}
+
+body:multipart-form {
+  formation: '''
+    {
+          "name": "Formation Spring Boot",
+          "formatterName": "Mohamed Alami",
+          "description": "Formation complète sur Spring Boot et les best practices",
+          "objectif": "Maîtriser Spring Boot et développer des applications robustes",
+          "durationHours": 60,
+          "price": 500.0,
+          "categoryId": 1
+        }
+  ''' @contentType(application/json )
+  image: @file(C:\Users\fatima\Pictures\Screenshots\Screenshot 2026-01-19 111811.png) @contentType(image/png)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

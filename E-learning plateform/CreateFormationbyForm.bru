@@ -1,0 +1,36 @@
+meta {
+  name: CreateFormationbyForm
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:9090/formation-service/api/formations
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHUHFZWWNXNE5lUk5uS3FUdmx1ZHVIZDYwT20ySnBYalZFUl9ZWng3SjRNIn0.eyJleHAiOjE3NjkxODAzMDcsImlhdCI6MTc2OTE4MDAwNywianRpIjoiZGY1ZTExOTgtYjI1NS00NTg3LTg4NWMtNjhlODk1OTdmMDBmIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9lLWxlYXJuaW5nLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImEzMzBiMmUwLTZkYjAtNGI2OS05ZGFiLWNiNjZlYmY2MzBkZiIsInR5cCI6IkJlYXJlciIsImF6cCI6IkF1dGgtU2VydmljZSIsInNlc3Npb25fc3RhdGUiOiI3ZmNiOTRhYi0xNjNkLTRiMTQtYTM4YS0zODEzZGIzZGU5MDciLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZS1sZWFybmluZy1yZWFsbSIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJST0xFX0ZPUk1BVFRFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsInNpZCI6IjdmY2I5NGFiLTE2M2QtNGIxNC1hMzhhLTM4MTNkYjNkZTkwNyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiQWhtZWRoaWggQmVuYW5pIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWhtZWRmb3JtYXR0b3IxIiwiZ2l2ZW5fbmFtZSI6IkFobWVkaGloIiwiZmFtaWx5X25hbWUiOiJCZW5hbmkiLCJlbWFpbCI6ImFobWVkZmF0aW1hQGV4YW1wbGUuY29tIn0.EQCkNzG6ZcjvBGKByOsGUfGr0efqQYzn_o2yqP995XRBrGIba1z1teAzYAvH7MRS-RWEdyPd9I3ktsojFn8Eywd5U3T14YhVnzaCKn9hWsYip4EpRduZ9BtZzG8Fc6KeEXOzEOCAz6xKbTdmFbS7XoA9wc8Ysu9xpA_arZeTWF6J6MN6nEWH3y2evMoyWDkKmMmwCSY9rAEe7qyB-hmq71xkMTfH3TZRhysgY3Id5B2Ch7ZnMj2QOyVRPlZ-7Bz0wLHye3AtizetEygdAC6pRBJfYL1ps2cUXTbHSZNx4eDDJTrdNeqeHOiXuyGB6AxkBv-b3ugp3lmObwLJVw2HBQ
+}
+
+body:multipart-form {
+  " formation": '''
+    
+         {
+                  "name": "Formation Spring Boot",
+                  "formatterName": "Mohamed Alami",
+                  "description": "Formation complète sur Spring Boot et les best practices",
+                  "objectif": "Maîtriser Spring Boot et développer des applications robustes",
+                  "durationHours": 60,
+                  "price": 500.0,
+                  "categoryId": 1
+                }
+  ''' @contentType(Json )
+  image: @file() @contentType(File )
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,68 @@
+
+services:
+  # PostgreSQL Database
+  postgres-formation:
+    image: postgres:15-alpine
+    container_name: postgres-formation
+    environment:
+      POSTGRES_DB: formationdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-formation-data:/var/lib/postgresql/data
+    networks:
+      - elearning-network
+
+#  # MinIO Object Storage
+#  minio:
+#    image: minio/minio:latest
+#    container_name: minio-formation
+#    command: server /data --console-address ":9001"
+#    environment:
+#      MINIO_ROOT_USER: minioadmin
+#      MINIO_ROOT_PASSWORD: minioadmin
+#    ports:
+#      - "9101:9000"    # API
+#      - "9001:9001"    # Console
+#    volumes:
+#      - minio-data:/data
+#    networks:
+#      - elearning-network
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+#      interval: 30s
+#      timeout: 20s
+#      retries: 3
+
+  # Formation Service (Spring Boot)
+#  formation-service:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: formation-service
+#    depends_on:
+#      - postgres-formation
+#      - minio
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-formation:5432/formationdb
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: postgres
+#      MINIO_URL: http://minio:9000
+#      MINIO_ACCESS_KEY: minioadmin
+#      MINIO_SECRET_KEY: minioadmin
+#      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/e-learning-realm
+#      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/e-learning-realm/protocol/openid-connect/certs
+#    ports:
+#      - "8083:8083"
+#    networks:
+#      - elearning-network
+
+volumes:
+  postgres-formation-data:
+  minio-data:
+
+networks:
+  elearning-network:
+    external: true

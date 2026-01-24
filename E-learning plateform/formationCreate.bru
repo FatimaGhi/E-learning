@@ -1,0 +1,35 @@
+meta {
+  name: formationCreate
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:9090/formation-service/api/formations
+  body: multipartForm
+  auth: inherit
+}
+
+headers {
+  Content-Type: multipart/form-data
+}
+
+body:multipart-form {
+  formation: '''
+     {
+          "name": "Formation Spring Boot",
+          "formatterName": "Mohamed Alami",
+          "description": "Formation complète sur Spring Boot et les best practices",
+          "objectif": "Maîtriser Spring Boot et développer des applications robustes",
+          "durationHours": 60,
+          "price": 500.0,
+          "categoryId": 1
+        }
+  ''' @contentType(JSON)
+  image: @file() @contentType(FILE)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

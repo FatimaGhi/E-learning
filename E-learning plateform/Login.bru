@@ -1,15 +1,23 @@
 meta {
   name: Login
   type: http
-  seq: 4
+  seq: 5
 }
 
 post {
   url: http://localhost:9090/auth-service/api/auth/login
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "email" : "ahmedfatima@example.com",
+    "password" : "2001Fati"
+  }
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

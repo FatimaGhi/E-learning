@@ -1,0 +1,36 @@
+meta {
+  name: CreateForamtion
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:9090
+  body: multipartForm
+  auth: inherit
+}
+
+headers {
+  Content-Type: multipart/form-data
+}
+
+body:multipart-form {
+  formation: '''
+    {
+      "name": "Formation Spring Boot",
+      "description": "Formation 7awla Spring Boot ou best practices",
+      "duration": 60,
+      "price": 500.0,
+      "category": "TECHNOLOGY",
+      "maxParticipants": 25,
+      "startDate": "2024-12-01T09:00:00",
+      "endDate": "2024-12-01T17:00:00"
+    }
+  ''' @contentType(TEXT)
+  image: @file() @contentType(FILE)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

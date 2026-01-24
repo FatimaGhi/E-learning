@@ -1,0 +1,39 @@
+meta {
+  name: Formation
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:9090/formation-service/api/formations
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Content-Type: multipart/form-data
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHUHFZWWNXNE5lUk5uS3FUdmx1ZHVIZDYwT20ySnBYalZFUl9ZWng3SjRNIn0.eyJleHAiOjE3NjkxNjUzNTAsImlhdCI6MTc2OTE2NTA1MCwianRpIjoiNjkyNmQ1NDEtY2FjMy00NzUxLThhYmYtNDhjYTViZTQxZTFjIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9lLWxlYXJuaW5nLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImEzMzBiMmUwLTZkYjAtNGI2OS05ZGFiLWNiNjZlYmY2MzBkZiIsInR5cCI6IkJlYXJlciIsImF6cCI6IkF1dGgtU2VydmljZSIsInNlc3Npb25fc3RhdGUiOiI5MWI2NTVjYy03YWQwLTQ1ZTctODcxMi0wNGQwYWRmNjgyMjIiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZS1sZWFybmluZy1yZWFsbSIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJST0xFX0ZPUk1BVFRFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsInNpZCI6IjkxYjY1NWNjLTdhZDAtNDVlNy04NzEyLTA0ZDBhZGY2ODIyMiIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiQWhtZWRoaWggQmVuYW5pIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWhtZWRmb3JtYXR0b3IxIiwiZ2l2ZW5fbmFtZSI6IkFobWVkaGloIiwiZmFtaWx5X25hbWUiOiJCZW5hbmkiLCJlbWFpbCI6ImFobWVkZmF0aW1hQGV4YW1wbGUuY29tIn0.OLiJJQKZ41LQuv6pbQT2wLvOUr2kENz8IYPNGQYeJHydApixE5ywUBmpfN4ivJtWlv9V_3nN48qJ-EiwN6YtO-vIwBtwHYWwd-g2kTH_TejnvTcpQWOKM7zkLoTmROOzSYfSVqN8qkZD2uUFLLBRbu_uQ9oEncqXp2z4sZ0Dk_EuCai9YRuv-nYAd0c96qKZeAWcFK7t1sxG9p_7_Fkql66QDmwa0NsCMvznFR8jthxkzMWIO0ZCXXg4Wfo7-0utBZwxMKHqzhpJyhVFZt319yLuoSe3RDDFOmXHtFrjXRPPhkaY-L0RpwsF6wC9tLpOEbMWy0KmFCEFx36ePG2LFw
+}
+
+body:multipart-form {
+  formation: '''
+    {
+      "name": "Formation Spring Boot",
+      "formatterName": "Mohamed Alami",
+      "description": "Formation complète sur Spring Boot et les best practices",
+      "objectif": "Maîtriser Spring Boot et développer des applications robustes",
+      "durationHours": 60,
+      "price": 500.0,
+      "categoryId": 1
+    }
+  ''' @contentType(TEXT)
+  image: @file() @contentType(FILE)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
