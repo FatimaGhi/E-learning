@@ -1,0 +1,43 @@
+#spring.application.name=Auth-Service
+#server.port=9001
+#
+#
+#
+## Keycloak configuration
+#keycloak.auth-server-url=http://localhost:8080
+#keycloak.realm=e-learning-realm
+#keycloak.admin-username=admin
+#keycloak.admin-password=admin
+#keycloak.client-id=Auth-Service
+#keycloak.client-secret=sJFdn7ZexGShAacpwGISAimmEoYNDTe1
+#
+## Logging levels
+#logging.level.dcc.authservice=DEBUG
+#logging.level.org.springframework.cloud.openfeign=DEBUG
+#
+#
+##consul
+#spring.cloud.consul.host=localhost
+#spring.cloud.consul.port=8500
+#spring.cloud.consul.discovery.enabled=true
+#spring.cloud.consul.discovery.service-name=Auth-Service
+#
+#management.endpoints.web.exposure.include=health,info
+#management.endpoint.health.show-details=always
+#spring.cloud.consul.discovery.register=true
+#spring.cloud.consul.discovery.prefer-ip-address=true
+#
+#
+#spring.cloud.consul.discovery.health-check-path=/actuator/health
+#spring.cloud.consul.discovery.health-check-interval=10s
+#
+#
+## Auth Service DEBUG logs
+#logging.level.org.springframework.security=DEBUG
+#logging.level.org.springframework.web=DEBUG
+
+
+
+spring:
+  application:
+    name: Auth-Service

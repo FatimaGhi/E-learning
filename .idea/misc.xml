@@ -10,10 +10,13 @@
         <option value="$PROJECT_DIR$/Student-Service/Auth-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Auth-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Formation-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Formation-Service/Enrollment-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Enrollment-Service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/Formation-Service/Enrollment-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Student-Service/Auth-Service/pom.xml" />
         <option value="$PROJECT_DIR$/e-learning/Gateway-service/pom.xml" />
       </set>

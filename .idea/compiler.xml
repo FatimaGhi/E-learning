@@ -9,7 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Gateway-Service" />
       </profile>
-      <profile name="Annotation profile for Formation-Service" enabled="true">
+      <profile name="Annotation profile for Enrollment-Service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -17,6 +17,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="Formation-Service" />
+        <module name="Enrollment-Service" />
         <module name="Student-Service" />
         <module name="Auth-Service" />
       </profile>
@@ -28,6 +29,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Auth-Service" options="-parameters" />
+      <module name="Enrollment-Service" options="-parameters" />
       <module name="Formation-Service" options="-parameters" />
       <module name="Gateway-Service" options="-parameters" />
       <module name="Gateway-service" options="-parameters" />

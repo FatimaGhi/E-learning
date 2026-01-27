@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: Enrollement-Service
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      config:
+        enabled: true
+        format: FILES
+        prefixes: config
+        default-context: application
