@@ -151,7 +151,6 @@ pipeline {
                 }
             }
         }
-    }
 
      stage('Slack Notification - Success') {
                 steps {
