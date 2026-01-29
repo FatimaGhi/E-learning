@@ -91,7 +91,7 @@ pipeline {
 //                     }
 //                 }
 //             }
-        }
+//         }
 
 //         stage('Slack Alert on Vulnerabilities') {
 //             when {
