@@ -8,6 +8,7 @@ import dcc.studentservice.shared.GlobalResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class StudentController {
 
     // Get student by ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_ADMIN')")
     public ResponseEntity<GlobalResponse<StudentResponseDTO>> getStudent(
             @PathVariable UUID id) {
         StudentResponseDTO student = studentService.getStudentById(id);
@@ -42,6 +44,7 @@ public class StudentController {
 
     // Get all students
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<GlobalResponse<List<StudentResponseDTO>>> getAllStudents() {
         List<StudentResponseDTO> students = studentService.getAllStudents();
         return ResponseEntity.status(HttpStatus.OK).body(new GlobalResponse<>(students));
@@ -50,6 +53,7 @@ public class StudentController {
     // Update student
     // Partial update - PATCH
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT')")
     public ResponseEntity<GlobalResponse<StudentResponseDTO>> partialUpdateStudent(
             @PathVariable UUID id,
             @RequestBody StudentRequestDTO requestDTO) {
@@ -66,6 +70,7 @@ public class StudentController {
 
     // Delete student
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<GlobalResponse<Void>> deleteStudent(@PathVariable UUID id) {
         studentService.deleteStudent(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)

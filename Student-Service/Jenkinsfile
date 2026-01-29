@@ -1,0 +1,186 @@
+pipeline {
+    agent any
+
+    environment {
+        SONARCLOUD_URL = 'https://sonarcloud.io'
+        SONARCLOUD_ORGANIZATION = 'fatimaghi'
+        SONARCLOUD_TOKEN = 'e0cf1784d9bd31bb1da885bfde3bca4548b64971'
+        SONARCLOUD_PROJECT_KEY = 'Student_Service_Project'
+
+        registryCredential = 'Docker_Hub_Login'
+        dockerimagename = "fatimaghi/student-service:latest"
+    }
+
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/FatimaGhi/E-learning',
+                    credentialsId: 'Github_token'
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                dir('elearning-platform/Student-Service') {
+                    bat 'mvn clean compile'
+                }
+            }
+        }
+
+        stage('Test Unitaire') {
+            steps {
+                dir('elearning-platform/Student-Service') {
+                    bat 'mvn test'
+                }
+            }
+        }
+
+        stage('Code Quality - SonarCloud') {
+            steps {
+                dir('elearning-platform/Student-Service') {
+                    bat """
+                    mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar ^
+                        -Dsonar.projectKey=${SONARCLOUD_PROJECT_KEY} ^
+                        -Dsonar.organization=${SONARCLOUD_ORGANIZATION} ^
+                        -Dsonar.host.url=${SONARCLOUD_URL} ^
+                        -Dsonar.login=${SONARCLOUD_TOKEN}
+                    """
+                }
+            }
+        }
+
+        stage('Package Jar') {
+            steps {
+                dir('elearning-platform/Student-Service') {
+                    bat 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('elearning-platform/Student-Service') {
+                    script {
+                        dockerImage = docker.build dockerimagename
+                    }
+                }
+            }
+        }
+
+        stage('Trivy Security Scan') {
+            steps {
+                dir('elearning-platform/Student-Service') {
+                    catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                        bat """
+                        docker run --rm ^
+                          -v /var/run/docker.sock:/var/run/docker.sock ^
+                          -v %WORKSPACE%/elearning-platform/Student-Service/trivy:/scan ^
+                          aquasec/trivy:latest image ^
+                          --severity HIGH,CRITICAL ^
+                          --format json ^
+                          --output /scan/trivy-result.json ^
+                          ${dockerimagename}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Slack Alert on Vulnerabilities') {
+            when {
+                expression { currentBuild.currentResult == 'FAILURE' }
+            }
+            steps {
+                script {
+                    slackSend(
+                        channel: '#devsecops-alerts',
+                        message: """🚨 *STUDENT SERVICE - SECURITY ALERT*
+❌ Pipeline STOPPED
+
+📦 Image: ${dockerimagename}
+🔥 Severity: HIGH / CRITICAL
+🏗️ Build: #${env.BUILD_NUMBER}
+
+➡️ Fix vulnerabilities before deploy.
+""",
+                        botUser: true,
+                        tokenCredentialId: 'slack-token'
+                    )
+                }
+            }
+        }
+
+        stage('Stop Pipeline on Vulnerabilities') {
+            when {
+                expression { currentBuild.currentResult == 'FAILURE' }
+            }
+            steps {
+                error("Pipeline stopped - HIGH/CRITICAL vulnerabilities detected")
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                dir('elearning-platform/Student-Service') {
+                    script {
+                        docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                            dockerImage.push("latest")
+                            dockerImage.push("${env.BUILD_NUMBER}")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                dir('elearning-platform/Student-Service') {
+                    script {
+                        kubernetesDeploy(
+                            configs: "Student-Deploy.yaml",
+                            kubeconfigId: "kubernetes"
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Student-Service Build Complete!"
+        }
+        success {
+            mail to: 'fatimazahraeelghiouan69@gmail.com',
+                 subject: "✅ Student-Service Build #${env.BUILD_NUMBER} SUCCESS",
+                 body: """
+                 Build successful!
+
+                 Service: Student-Service
+                 Build: #${env.BUILD_NUMBER}
+                 Image: ${dockerimagename}
+
+                 Deployed to Kubernetes successfully.
+                 """
+        }
+        failure {
+            mail to: 'fatimazahraeelghiouan69@gmail.com',
+                 subject: "❌ Student-Service Build #${env.BUILD_NUMBER} FAILED",
+                 body: """
+                 Build failed!
+
+                 Service: Student-Service
+                 Build: #${env.BUILD_NUMBER}
+
+                 Check Jenkins logs for details.
+                 """
+        }
+    }
+}

@@ -5,7 +5,7 @@ services:
     image: postgres:15
     container_name: elearning-postgres
     environment:
-      POSTGRES_USER: postgres  # <-- Utiliser l'utilisateur par défaut
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: elearning_student
     ports:
