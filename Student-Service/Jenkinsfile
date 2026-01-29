@@ -28,7 +28,7 @@ pipeline {
 
         stage('Compile') {
             steps {
-                dir('elearning-platform/Student-Service') {
+                dir('Student-Service') {
                     bat 'mvn clean compile'
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
 
         stage('Test Unitaire') {
             steps {
-                dir('elearning-platform/Student-Service') {
+                dir('Student-Service') {
                     bat 'mvn test'
                 }
             }
@@ -44,7 +44,7 @@ pipeline {
 
         stage('Code Quality - SonarCloud') {
             steps {
-                dir('elearning-platform/Student-Service') {
+                dir('Student-Service') {
                     bat """
                     mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar ^
                         -Dsonar.projectKey=${SONARCLOUD_PROJECT_KEY} ^
@@ -58,7 +58,7 @@ pipeline {
 
         stage('Package Jar') {
             steps {
-                dir('elearning-platform/Student-Service') {
+                dir('Student-Service') {
                     bat 'mvn clean package -DskipTests'
                 }
             }
@@ -66,7 +66,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('elearning-platform/Student-Service') {
+                dir('Student-Service') {
                     script {
                         dockerImage = docker.build dockerimagename
                     }
@@ -76,7 +76,7 @@ pipeline {
 
         stage('Trivy Security Scan') {
             steps {
-                dir('elearning-platform/Student-Service') {
+                dir('Student-Service') {
                     catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                         bat """
                         docker run --rm ^
@@ -126,22 +126,22 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                dir('elearning-platform/Student-Service') {
-                    script {
-                        docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-                            dockerImage.push("latest")
-                            dockerImage.push("${env.BUILD_NUMBER}")
-                        }
-                    }
-                }
-            }
-        }
+//         stage('Push Docker Image') {
+//             steps {
+//                 dir('Student-Service') {
+//                     script {
+//                         docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+//                             dockerImage.push("latest")
+//                             dockerImage.push("${env.BUILD_NUMBER}")
+//                         }
+//                     }
+//                 }
+//             }
+//         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                dir('elearning-platform/Student-Service') {
+                dir('Student-Service') {
                     script {
                         kubernetesDeploy(
                             configs: "Student-Deploy.yaml",
