@@ -160,20 +160,20 @@ pipeline {
                             channel: '#devsecops-alerts',
                             color: 'good',
                             message: """✅ *STUDENT SERVICE - DEPLOYMENT SUCCESS*
+                            Service:* Student-Service
+                            Build:* #${env.BUILD_NUMBER}
+                            Image:* ${dockerimagename}:${env.BUILD_NUMBER}
+                            Time:* ${new Date().format('yyyy-MM-dd HH:mm:ss')}
 
-      Service:* Student-Service
-      Build:* #${env.BUILD_NUMBER}
-      Image:* ${dockerimagename}:${env.BUILD_NUMBER}
-      Time:* ${new Date().format('yyyy-MM-dd HH:mm:ss')}
-
-     Successfully deployed to Kubernetes!
-     <${env.BUILD_URL}|View Build Details>
-    """,
+                            Successfully deployed to Kubernetes!
+                             <${env.BUILD_URL}|View Build Details>
+                            """,
                             botUser: true,
                             tokenCredentialId: 'slack-token'
                         )
                     }
                 }
+     }
 
     post {
         always {
